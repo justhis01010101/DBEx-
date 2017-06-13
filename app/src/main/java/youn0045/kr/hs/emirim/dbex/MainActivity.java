@@ -1,6 +1,7 @@
 package youn0045.kr.hs.emirim.dbex;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.support.v7.app.AppCompatActivity;
@@ -51,6 +52,19 @@ public class MainActivity extends AppCompatActivity {
                  Toast.makeText(MainActivity.this,"저장됨", Toast.LENGTH_LONG).show();
              }
          });
+        but_select.setOnClickListener(new  View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                sqldb= myHelper.getReadableDatabase();
+                String sql = "select *from justhis table";
+                Cursor cursor = sqldb.rawQuery(sql, null);
+                String names= "justhis  이름"+"\r\n"+"==============="+"\r\n";
+                String counts= "justhis  인원수"+"\r\n"+"==============="+"\r\n";
+                while(cursor.moveToNext()){
+
+                }
+            }
+        });
     }
     class MyDBHelper extends SQLiteOpenHelper{
         //생성자 호출 시 저스디스라는 데이터베이스가 생성된다
