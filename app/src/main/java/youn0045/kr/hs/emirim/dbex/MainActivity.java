@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
     EditText editName, editCount, editResultName, editResultCount;
@@ -40,6 +41,16 @@ public class MainActivity extends AppCompatActivity {
                 sqldb.close();
             }
         });
+         but_insert.setOnClickListener(new View.OnClickListener(){
+             @Override
+             public void onClick(View view){
+                 sqldb=myHelper.getWritableDatabase();
+                 String sql="insert into justhis table values('"+editName.getText()+"',"+editCount.getText()+")";
+                 sqldb.execSQL(sql);
+                 sqldb.close();
+                 Toast.makeText(MainActivity.this,"저장됨", Toast.LENGTH_LONG).show();
+             }
+         });
     }
     class MyDBHelper extends SQLiteOpenHelper{
         //생성자 호출 시 저스디스라는 데이터베이스가 생성된다
