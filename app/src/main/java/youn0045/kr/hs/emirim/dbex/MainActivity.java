@@ -83,6 +83,17 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        but_update.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sqldb = myHelper.getWritableDatabase();
+                String sql = "update justhis set justhiscount="+editCount.getText()+" where justhisName='"+"'";
+                sqldb.execSQL(sql);
+                sqldb.close();
+                Toast.makeText(MainActivity.this, "인원수가 삭제 됨", Toast.LENGTH_LONG).show();
+            }
+        });
+
 
     }
     class MyDBHelper extends SQLiteOpenHelper {
