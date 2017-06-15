@@ -18,6 +18,7 @@ public class MainActivity extends AppCompatActivity {
     Button but_select;
     MyDBHelper myHelper;
     SQLiteDatabase sqldb;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,42 +32,47 @@ public class MainActivity extends AppCompatActivity {
         but_select = (Button) findViewById(R.id.but_select);
 
         // 데이터 베이스 생성
-        myHelper= new MyDBHelper(this);
+        myHelper = new MyDBHelper(this);
         //기존의 테이블이 존재하면 삭제하고 테이블을 새로 생성한다.
-        but_init.setOnClickListener(new View.OnClickListener()
-        {
+        but_init.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view){
-                sqldb= myHelper.getWritableDatabase();
-                myHelper.onUpgrade(sqldb,1,2);
+            public void onClick(View view) {
+                sqldb = myHelper.getWritableDatabase();
+                myHelper.onUpgrade(sqldb, 1, 2);
                 sqldb.close();
             }
         });
-         but_insert.setOnClickListener(new View.OnClickListener(){
-             @Override
-             public void onClick(View view){
-                 sqldb=myHelper.getWritableDatabase();
-                 String sql="insert into justhis table values('"+editName.getText()+"',"+editCount.getText()+")";
-                 sqldb.execSQL(sql);
-                 sqldb.close();
-                 Toast.makeText(MainActivity.this,"저장됨", Toast.LENGTH_LONG).show();
-             }
-         });
-        but_select.setOnClickListener(new  View.OnClickListener(){
+        but_insert.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view){
-                sqldb= myHelper.getReadableDatabase();
-                String sql = "select *from justhis table";
+            public void onClick(View view) {
+                sqldb = myHelper.getWritableDatabase();
+                String sql = "insert into justhis values('" + editName.getText() + "'," + editCount.getText() + ")";
+                sqldb.execSQL(sql);
+                sqldb.close();
+                Toast.makeText(MainActivity.this, "저장됨", Toast.LENGTH_LONG).show();
+            }
+        });
+        but_select.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sqldb = myHelper.getReadableDatabase();
+                String sql = "select * from justhis";
                 Cursor cursor = sqldb.rawQuery(sql, null);
-                String names= "justhis  이름"+"\r\n"+"==============="+"\r\n";
-                String counts= "justhis  인원수"+"\r\n"+"==============="+"\r\n";
-                while(cursor.moveToNext()){
-
+                String names = "justhis  이름" + "\r\n" + "===============" + "\r\n";
+                String counts = "justhis  인원수" + "\r\n" + "===============" + "\r\n";
+                while (cursor.moveToNext()) { //data형이 존재할동안만 반복문 실행
+                    names+=cursor.getString(0)+"\r\n";//첫번째 calmn
+                    counts+=cursor.getInt(1)+"\r\n";//\r\n: 다음줄로 연결
                 }
+                editResultName.setText(names);
+                editResultCount.setText(counts);
+                cursor.close();
+                sqldb.close();
             }
         });
     }
-    class MyDBHelper extends SQLiteOpenHelper{
+
+    class MyDBHelper extends SQLiteOpenHelper {
         //생성자 호출 시 저스디스라는 데이터베이스가 생성된다
         public MyDBHelper(Context context) {
             super(context, "JUSTHIS", null, 1);
@@ -75,16 +81,16 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onCreate(SQLiteDatabase sqLiteDatabase) {
-            String sql= "create table justhis table(justhis name text not null primary key, justhiscount integer)";
+            String sql = "create table justhis(name text not null primary key, justhiscount integer)";
             sqLiteDatabase.execSQL(sql);
         }
+
         //이미 저스디스 테이블이 존재한다면 기존의 테이블을 삭제하고 새로 테이블을 만들때 호출
         @Override
         public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
-            String sql= "drop table if exist justhis table"; //만약에 저스디스 테이블이 존재한다면 테이블을 삭제해라
+            String sql = "drop table if exists justhis"; //만약에 저스디스 테이블이 존재한다면 테이블을 삭제해라
             sqLiteDatabase.execSQL(sql);
             onCreate(sqLiteDatabase);
-
         }
     }
 }
