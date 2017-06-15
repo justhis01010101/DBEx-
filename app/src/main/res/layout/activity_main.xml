@@ -11,6 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:gravity="center"
         >
         <TextView
             android:layout_width="wrap_content"
@@ -60,6 +61,7 @@
             />
         <Button
             android:id="@+id/but_insert"
+            android:layout_weight="0dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="입력"
@@ -82,9 +84,7 @@
             android:layout_height="wrap_content"
             android:text="삭제"
             />
-
     </LinearLayout>
-
     <LinearLayout
         android:layout_marginTop="10dp"
         android:layout_width="match_parent"
