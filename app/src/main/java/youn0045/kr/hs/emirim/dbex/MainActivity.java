@@ -16,6 +16,7 @@ public class MainActivity extends AppCompatActivity {
     Button but_init;
     Button but_insert;
     Button but_select;
+    Button but_update;
     MyDBHelper myHelper;
     SQLiteDatabase sqldb;
 
@@ -30,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
         but_init = (Button) findViewById(R.id.but_init);
         but_insert = (Button) findViewById(R.id.but_insert);
         but_select = (Button) findViewById(R.id.but_select);
+        but_update=(Button)findViewById(R.id.but_update);
 
         // 데이터 베이스 생성
         myHelper = new MyDBHelper(this);
@@ -70,8 +72,19 @@ public class MainActivity extends AppCompatActivity {
                 sqldb.close();
             }
         });
-    }
+        but_update.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sqldb = myHelper.getWritableDatabase();
+                String sql = "update justhis set justhiscount="+editCount.getText()+" where justhisName='"+"'";
+                sqldb.execSQL(sql);
+                sqldb.close();
+                Toast.makeText(MainActivity.this, "인원수가 수정 됨", Toast.LENGTH_LONG).show();
+            }
+        });
 
+
+    }
     class MyDBHelper extends SQLiteOpenHelper {
         //생성자 호출 시 저스디스라는 데이터베이스가 생성된다
         public MyDBHelper(Context context) {
